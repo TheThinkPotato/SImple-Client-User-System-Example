@@ -1,6 +1,12 @@
-
 import random
+import os
 from user import *
+
+def clearScreen():
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')        
 
 def changePassword(user): 
     print(user.getUsername() + ' changing password')
@@ -12,7 +18,18 @@ def changePassword(user):
     user.updateUserToFile()
     print('\n\nPassword changed successfully')
 
-def resetPassword(user):   
+def resetPassword():
+    userName = input("Enter username: ")            
+    success = False
+    for user in users:
+        if user.getUsername() == userName:                                              
+            success = resetPasswordUser(user)
+            break
+    if(not success):
+        print("\nUser not found or invalid answer to security question.")
+    return
+
+def resetPasswordUser(user):   
     inputAnswer = input(user.getQuestion() + "?: ")    
     if inputAnswer != user.getAnswer().strip():
         print('\n\nIncorrect answer.')
@@ -65,7 +82,7 @@ def registerUser():
         
         return password
 
-    os.system('cls')
+    clearScreen()
 
     while True:
         username = input('\n\nEnter username: ')
@@ -77,29 +94,30 @@ def registerUser():
             print('\n\nUser already exists!')
             return
     
-    selection = registerUserOptions()
-    newUser = None
+    selection = registerUserOptions()    
+    newPassword = None
 
     if selection == "1":
         while True:
             password = input('Enter password: ')
-            if passwordRules(password):                            
-                newUser = User(username, password, '', '')
+            if passwordRules(password):                                            
+                newPassword = password
                 break
     
     elif selection == "2":
         password = generatePassword()
         print('\n\nYour generated password: ', password)
-        newUser = User(username, password, '', '')
+        newPassword = password
     
-    setSecurityQuestion(newUser)
+    newUser = User(username, newPassword, None, None)
+    setSecurityQuestion(newUser)        
     users.append(newUser)
     newUser.saveUserToFile()
     print('\nUser registered successfully')
 
 
 def login():
-    os.system('cls')    
+    clearScreen() 
     global users
     passwordTries = 3
     passwordTriesCount = 0    

@@ -1,3 +1,4 @@
+import userControl
 import os
 
 currentUser = None
@@ -53,11 +54,10 @@ class User:
             for line in lines:
                 if line.strip() and line.split(',')[0] != self.username:
                     file.write(line)
-            file.write(self.username + ',' + self.password + ',' + self.question + ',' + self.answer + '\n')
-
+            file.write(self.username + ',' + self.password + ',' + self.question + ',' + self.answer + '\n')              
 
 def viewAccounts():
-    os.system('cls')
+    userControl.clearScreen()
     print("\n\n System User Details")    
     print("----------------------------------------------------------")
     for user in users:
@@ -85,8 +85,9 @@ def loadData():
     
     with open(accountsFile, 'r') as file:
         for line in file:
-            username, password, question, answer = line.split(',')                         
-            users.append(User(username, password, question, answer))
+            if line.strip() != "":                
+                username, password, question, answer = line.split(',')                         
+                users.append(User(username, password, question, answer))
     
     return users
 

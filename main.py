@@ -1,8 +1,6 @@
 import time
 from userControl import *
 from user import *
-import os
-os.system('cls')
 
 def welcome():
     print("\n\n---------------------------------------------------")
@@ -23,14 +21,13 @@ def options():
     print("---------------------------------------------------")
     return input("Enter your choice: ")
     
-
 def totalTime():
     systemRunTime = time.time() - startTime    
     minutes = int(systemRunTime / 60)
     seconds =  int(systemRunTime % 60)
     return minutes, seconds
 
-
+clearScreen()
 startTime = time.time()
 users = loadData()
 
@@ -45,14 +42,7 @@ while menuInput != "6":
         case "2":            
             registerUser()
         case "3":
-            userName = input("Enter username: ")            
-            success = False
-            for user in users:
-                if user.getUsername() == userName:                                              
-                    success = resetPassword(user)
-                    break
-            if(not success):
-                print("\nUser not found or invalid answer to security question.")
+            resetPassword()
         case "4":
             if getCurrentUser() == None:
                 print("\nInvalid choice")   
